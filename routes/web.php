@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PersonalDetailsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,3 +16,5 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::post('personal_information', [PersonalDetailsController::class, 'store'])->name('personal_information.store');

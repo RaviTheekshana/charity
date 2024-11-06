@@ -19,5 +19,25 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+        $programs = [
+            'Angel Tree','Kids Clubs','Promis Path','Scholarship Program','Poorna Jeevana'
+        ];
+        foreach ($programs as $program) {
+            \App\Models\Program::create([
+                'name' => $program,
+            ]);
+        }
+
+        $prisons = [
+            'Agunukolapallassa','Ambepussa','Anuradhapura','Badulla','Batticalo','Bogambara','Boossa',
+            'Colombo Remand','Dumbara','Gall','Jaffna','Kaluthara','Kandewatta','Kandurugasaara','Kegall','Kuruwita',
+            'Magazine','Mahara','Matara','Meethirigala','Monaragala','Negambo','Pallakale','Pallansena','Polonnaruwa',
+            'Thaldena','Trincomalee','Vavunia','Waariyapola','Wallikada','Wataraka','Weerawila'
+        ];
+        foreach ($prisons as $prison) {
+            \App\Models\Prison::create([
+                'name' => $prison,
+            ]);
+        }
     }
 }
