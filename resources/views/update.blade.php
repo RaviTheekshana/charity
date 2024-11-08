@@ -3,29 +3,6 @@
     <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         <!-- Card -->
         <div class="bg-white rounded-xl shadow p-4 sm:p-7">
-            <div class="mt-10 sm:mt-0 pb-2">
-                <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data" class="flex items-center justify-between bg-white p-4 rounded-lg drop-shadow-lg">
-                    @csrf
-                    <div class="flex items-center space-x-4">
-                        <label for="photo" class="font-medium text-xl text-gray-800">Upload CSV File:</label>
-                    </div>
-                    <input type="file" name="photo" id="photo" required class="border rounded-lg border-gray-300 pr-3 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-2xl hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">Upload</button>
-                </form>
-                @if (session('success'))
-                    <p class="text-green-600">{{ session('success') }}</p>
-                @endif
-                @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
-            </div>
-            <div class="flex items-center my-4">
-                <div class="flex-grow border-t border-gray-400"></div>
-                <span class="mx-4 text-gray-600">or</span>
-                <div class="flex-grow border-t border-gray-400"></div>
-            </div>
             @if ($errors->any())
                 <div class="alert alert-danger text-red-700">
                     <ul>
@@ -35,8 +12,9 @@
                     </ul>
                 </div>
             @endif
-            <form action="{{route('personal_information.store')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('personal_information.update', ['id' => $personalDetails->id])}}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <!-- Section -->
                 <div class="grid sm:grid-cols-12 gap-2 sm:gap-4 py-8 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
                     <div class="sm:col-span-12">
@@ -55,7 +33,7 @@
 
                     <div class="sm:col-span-9">
                         <div class="sm:flex">
-                            <input id="af-submit-application-full-name" name="inmate_no" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            <input id="af-submit-application-full-name" value="{{$personalDetails->Personal_Details->inmate_no}}" name="inmate_no" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                         </div>
                     </div>
                     <!-- End Col -->
@@ -69,7 +47,7 @@
 
                     <div class="sm:col-span-9">
                         <div class="sm:flex">
-                            <input id="af-submit-application-full-name" name="inmate_name" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            <input id="af-submit-application-full-name" value="{{$personalDetails->Personal_Details->inmate_name}}" name="inmate_name" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                         </div>
                     </div>
                     <!-- End Col -->
@@ -83,7 +61,7 @@
                         <select id="prison" x-model="prison" name="prison_id" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                             <option value="">Select</option>
                             @foreach(get_prisons() as $prison)
-                                <option value="{{ $prison->id }}">{{ ucfirst($prison->name) }}</option>
+                                <option value="{{ $prison->id }}" {{ $personalDetails->Personal_Details->prison_id == $prison->id ? 'selected' : '' }}>{{ ucfirst($prison->name) }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -95,7 +73,7 @@
                     <!-- End Col -->
 
                     <div class="sm:col-span-9">
-                        <input name="sentence_no" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <input name="sentence_no" value="{{$personalDetails->Personal_Details->sentence_no}}" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     </div>
                     <!-- End Col -->
 
@@ -113,170 +91,25 @@
                             id="af-submit-application-current-company"
                             name="end_sentence"
                             type="date"
-                            min="{{ \Carbon\Carbon::today()->toDateString() }}" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            min="{{ \Carbon\Carbon::today()->toDateString() }}" value="{{$personalDetails->Personal_Details->end_year_sentence->format('Y-m-d')}}" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     </div>
 
                     <!-- End Col -->
                 </div>
                 <!-- End Section -->
-
-{{--                <!-- Section -->--}}
-{{--                <div class="grid sm:grid-cols-12 gap-2 sm:gap-4 py-8 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">--}}
-{{--                    <div class="sm:col-span-12">--}}
-{{--                        <h2 class="text-lg font-semibold text-gray-800">--}}
-{{--                            Children Details--}}
-{{--                        </h2>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <div class="inline-block">--}}
-{{--                            <label for="af-submit-application-bio" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                                Child name--}}
-{{--                            </label>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <input id="af-submit-application-child-name" name="child_name" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Age--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <select x-model="age" name="age" class="py-2 px-3 pe-11 block w-50 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                                <option value="">Select</option>--}}
-{{--                                @for ($age = 5; $age <= 19; $age++)--}}
-{{--                                    <option value="{{ $age }}">{{ $age }}</option>--}}
-{{--                                @endfor--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Date Of Birth--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input id="af-submit-application-full-name" name="birthday" type="date" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Gender--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <select id="category" x-model="category" name="gender" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                                <option value="">Select</option>--}}
-{{--                                <option value="male">Male</option>--}}
-{{--                                <option value="female">Female</option>--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Address--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input id="af-submit-application-full-name" name="address" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            City--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input name="city" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-school" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            School--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input id="af-submit-application-school" name="school" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Grade--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input id="af-submit-application-full-name" name="grade" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Program--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <select id="program" x-model="program" name="program_id" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                            <option value="">Select</option>--}}
-{{--                            @foreach(get_programs() as $program)--}}
-{{--                                <option value="{{ $program->id }}">{{ ucfirst($program->name) }}</option>--}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                </div>--}}
-{{--                <!-- End Section -->--}}
                 <div x-data="{
     children: [
         {
-            child_name: '',
-            age: '',
-            birthday: '',
-            gender: '',
-            address: '',
-            city: '',
-            school: '',
-            grade: '',
-            program_id: ''
-        }
+            child_name: '{{$personalDetails->child_name}}',
+            age: '{{ $personalDetails->age }}',
+            birthday: '{{ $personalDetails->date_of_birth->format('Y-m-d') }}',
+            gender: '{{ $personalDetails->gender }}',
+            address: '{{ $personalDetails->address }}',
+            city: '{{ $personalDetails->city }}',
+            school: '{{ $personalDetails->school }}',
+            grade: '{{ $personalDetails->grade }}',
+            program_id: '{{ $personalDetails->program}}'
+        },
     ],
     addChild() {
         this.children.push({
@@ -297,7 +130,6 @@
         }
     }
 }">
-
                     <!-- Main Form Header -->
                     <div class="grid sm:grid-cols-12 gap-2 sm:gap-4 py-8 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">
                         <div class="sm:col-span-12">
@@ -400,7 +232,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <input type="number" x-model="child.grade" :name="'children[' + index + '][grade]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <input type="text" x-model="child.grade" :name="'children[' + index + '][grade]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
                             </div>
 
                             <!-- Program -->
@@ -447,7 +279,7 @@
                     <!-- End Col -->
 
                     <div class="sm:col-span-9">
-                        <input id="af-submit-application-linkedin-url" name="guardian" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <input id="af-submit-application-linkedin-url" value="{{$personalDetails->Guardian->guardian_name}}" name="guardian" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     </div>
                     <!-- End Col -->
 
@@ -459,7 +291,7 @@
                     <!-- End Col -->
 
                     <div class="sm:col-span-9">
-                        <input id="phone" name="contact_no_one" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <input id="phone" name="contact_no_one" value="{{$personalDetails->Guardian->contact_number_1}}" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     </div>
                     <!-- End Col -->
 
@@ -471,7 +303,7 @@
                     <!-- End Col -->
 
                     <div class="sm:col-span-9">
-                        <input id="phone" name="contact_no_two" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <input id="phone" name="contact_no_two" value="{{$personalDetails->Guardian->contact_number_2}}" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     </div>
                     <!-- End Col -->
 
@@ -483,7 +315,7 @@
                     <!-- End Col -->
 
                     <div class="sm:col-span-9">
-                        <input id="af-submit-application-portfolio-url" name="relationship" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <input id="af-submit-application-portfolio-url" value="{{$personalDetails->Guardian->relationship}}" name="relationship" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     </div>
                     <!-- End Col -->
 
@@ -495,7 +327,7 @@
                     <!-- End Col -->
 
                     <div class="sm:col-span-9">
-                        <input name="region" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <input name="region" type="text" value="{{$personalDetails->Guardian->region}}" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     </div>
                     <!-- End Col -->
 
@@ -507,7 +339,7 @@
                     <!-- End Col -->
 
                     <div class="sm:col-span-9">
-                        <input name="connecting_location" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <input name="connecting_location" type="text" value="{{$personalDetails->Guardian->connecting_location}}" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                     </div>
                     <!-- End Col -->
 
@@ -534,7 +366,7 @@
                 <!-- End Section -->
 
                 <button type="submit" class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-                    Submit application
+                    Update application
                 </button>
             </form>
         </div>

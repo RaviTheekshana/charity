@@ -17,4 +17,8 @@ class Guardian extends Model
         'region',
         'connecting_location',
     ];
+    public function children()
+    {
+        return $this->hasMany(Children::class, 'guardian_id');
+    }
 }

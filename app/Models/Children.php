@@ -29,4 +29,12 @@ class Children extends Model
             'date_of_birth' => 'datetime',
         ];
     }
+    public function Personal_Details()
+    {
+        return $this->belongsTo(Personal_Details::class, 'personal_details_id');
+    }
+    public function guardian()
+    {
+        return $this->belongsTo(Guardian::class, 'guardian_id');
+    }
 }

@@ -23,4 +23,8 @@ class Personal_Details extends Model
             'end_year_sentence' => 'datetime',
         ];
     }
+    public function children()
+    {
+        return $this->hasMany(Children::class, 'personal_details_id');
+    }
 }

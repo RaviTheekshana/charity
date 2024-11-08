@@ -18,3 +18,10 @@ Route::middleware([
 });
 
 Route::post('personal_information', [PersonalDetailsController::class, 'store'])->name('personal_information.store');
+
+Route::post('/import', [PersonalDetailsController::class, 'import'])->name('import');
+
+Route::get('data', [PersonalDetailsController::class, 'index'])->name('data.index');
+
+Route::get('/data/{id}', [PersonalDetailsController::class, 'edit'])->name('data.edit');
+Route::put('/data/{id}', [PersonalDetailsController::class, 'update'])->name('personal_information.update');
