@@ -13,24 +13,42 @@ class PersonalDetailsController extends Controller
 {
     public function index(Request $request)
     {
-            $query = Children::with('guardian', 'Personal_Details');
+        $query = Children::with('guardian', 'Personal_Details');
 
-            // Search Query
-            if ($request->filled('search')) {
-                $searchQuery = $request->input('search');
-                $query->where(function ($q) use ($searchQuery) {
-                    $q->where('child_name', 'LIKE', '%' . $searchQuery . '%')
-                        ->orWhereHas('guardian', function ($q) use ($searchQuery) {
-                            $q->where('guardian_name', 'LIKE', '%' . $searchQuery . '%');
-                        })
-                        ->orWhereHas('Personal_Details', function ($q) use ($searchQuery) {
-                            $q->where('inmate_name', 'LIKE', '%' . $searchQuery . '%');
-                        });
-                });
-            }
-            $personalDetails = $query->paginate(8);
-            return view('data', compact('personalDetails'));
+        // Search Query
+        if ($request->filled('search')) {
+            $searchQuery = $request->input('search');
+            $query->where(function ($q) use ($searchQuery) {
+                $q->where('child_name', 'LIKE', '%' . $searchQuery . '%')
+                    ->orWhereHas('guardian', function ($q) use ($searchQuery) {
+                        $q->where('guardian_name', 'LIKE', '%' . $searchQuery . '%');
+                    })
+                    ->orWhereHas('Personal_Details', function ($q) use ($searchQuery) {
+                        $q->where('inmate_name', 'LIKE', '%' . $searchQuery . '%');
+                    });
+            });
+        }
+
+        // Gender Filter
+        if ($request->filled('gender')) {
+            $genders = $request->input('gender');
+            $query->whereHas('Personal_Details', function ($q) use ($genders) {
+                $q->whereIn('gender', $genders);
+            });
+        }
+        // Age Range Filter
+        if ($request->filled('age_range')) {
+            list($minAge, $maxAge) = explode('-', $request->input('age_range'));
+            $query->whereHas('Personal_Details', function ($q) use ($minAge, $maxAge) {
+                $q->whereBetween('age', [(int)$minAge, (int)$maxAge]);
+            });
+        }
+
+        // Pagination and View
+        $personalDetails = $query->paginate(8);
+        return view('data', compact('personalDetails'));
     }
+
 
     public function create()
     {
