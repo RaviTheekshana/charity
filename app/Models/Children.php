@@ -37,4 +37,8 @@ class Children extends Model
     {
         return $this->belongsTo(Guardian::class, 'guardian_id');
     }
+    public function program()
+    {
+        return $this->belongsTo(Program::class, 'program');
+    }
 }

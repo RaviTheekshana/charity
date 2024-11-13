@@ -100,16 +100,16 @@
                 <div x-data="{
     children: [
         {
-            child_name: '{{$personalDetails->child_name}}',
+            child_name: '{{ addslashes($personalDetails->child_name) }}',
             age: '{{ $personalDetails->age }}',
             birthday: '{{ $personalDetails->date_of_birth->format('Y-m-d') }}',
             gender: '{{ $personalDetails->gender }}',
-            address: '{{ $personalDetails->address }}',
-            city: '{{ $personalDetails->city }}',
-            school: '{{ $personalDetails->school }}',
+            address: '{{ addslashes($personalDetails->address) }}',
+            city: '{{ addslashes($personalDetails->city) }}',
+            school: '{{ addslashes($personalDetails->school) }}',
             grade: '{{ $personalDetails->grade }}',
-            program_id: '{{ $personalDetails->program}}'
-        },
+            program_id: '{{ $personalDetails->program }}'
+        }
     ],
     addChild() {
         this.children.push({

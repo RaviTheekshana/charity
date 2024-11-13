@@ -76,7 +76,7 @@
 
                                 <!-- Dropdown Menu -->
                                 <div x-show="open"
-                                     class="hs-dropdown-menu transition-opacity duration-150 opacity-100 divide-y divide-gray-200 min-w-48 z-10 bg-white shadow-md rounded-lg mt-2 absolute right-0"
+                                     class="hs-dropdown-menu opacity-100 divide-y divide-gray-200 min-w-48 z-10 bg-white shadow-md rounded-lg mt-2 fixed right-96"
                                      role="menu"
                                      aria-orientation="vertical"
                                      x-transition:enter="transition ease-out duration-200"
@@ -87,31 +87,43 @@
                                      x-transition:leave-end="opacity-0 transform scale-95">
 
                                     <!-- Dropdown Options -->
-                                    <div class="divide-y divide-gray-200">
+                                    <div x-data="{ clearFilters() {document.getElementById('age').value = ''; document.getElementById('prison').value = ''; document.getElementById('program').value = '';}}" class="divide-y divide-gray-200">
                                         <label for="filter-all" class="flex py-2.5 px-3">
-                                            <input type="checkbox" id="filter-all" name="all" class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500">
+                                            <input type="checkbox" id="filter-all" name="all" @change="clearFilters()" class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500">
                                             <span class="ms-3 text-sm text-gray-800">All</span>
                                         </label>
-                                        <!-- Gender Filters -->
-                                        <label for="filter-male" class="flex py-2.5 px-3">
-                                            <input type="checkbox" id="filter-male" name="gender[]" value="male" class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500">
-                                            <span class="ms-3 text-sm text-gray-800">Male</span>
-                                        </label>
-                                        <label for="filter-female" class="flex py-2.5 px-3">
-                                            <input type="checkbox" id="filter-female" name="gender[]" value="female" class="shrink-0 mt-0.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500">
-                                            <span class="ms-3 text-sm text-gray-800">Female</span>
-                                        </label>
-
                                         <!-- Age Filter -->
                                         <label for="age" class="block py-2.5 px-3">
                                             <span class="text-sm text-gray-800">Age Range</span>
-                                            <select id="age" name="age_range" class="mt-1 block w-full border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500">
+                                            <select id="age" name="age_range"
+                                                    class="text-sm mt-1 block w-full border-gray-300 rounded-2xl focus:ring-blue-500 focus:border-blue-500">
                                                 <option value="">Select age range</option>
-                                                <option value="0-5">0-5</option>
-                                                <option value="6-10">6-10</option>
-                                                <option value="11-15">11-15</option>
-                                                <option value="16-20">16-20</option>
-                                                <option value="21-25">21-25</option>
+                                                <option value="0-5" {{ request()->get('age_range') == '0-5' ? 'selected' : '' }}>0-5</option>
+                                                <option value="6-10" {{ request()->get('age_range') == '6-10' ? 'selected' : '' }}>6-10</option>
+                                                <option value="11-15" {{ request()->get('age_range') == '11-15' ? 'selected' : '' }}>11-15</option>
+                                                <option value="16-20" {{ request()->get('age_range') == '16-20' ? 'selected' : '' }}>16-20</option>
+                                            </select>
+                                        </label>
+                                        <!-- Prison Filter -->
+                                        <label for="prison" class="block py-2.5 px-3">
+                                            <span class="text-sm text-gray-800">Prison</span>
+                                            <select id="prison" name="prison"
+                                                    class="text-sm mt-1 block w-full border-gray-300 rounded-2xl focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="">Select Prison</option>
+                                                @foreach(get_prisons() as $prison)
+                                                    <option value="{{ $prison->id }}" {{ request()->get('prison') == $prison->id ? 'selected' : '' }}>{{ $prison->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </label>
+                                        <!-- Program Filter -->
+                                        <label for="program" class="block py-2.5 px-3">
+                                            <span class="text-sm text-gray-800">Program</span>
+                                            <select id="program" name="program"
+                                                    class="text-sm mt-1 block w-full border-gray-300 rounded-2xl focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="">Select Program</option>
+                                                @foreach(get_programs() as $program)
+                                                    <option value="{{ $program->id }}" {{ request()->get('program') == $program->id ? 'selected' : '' }}>{{ $program->name }}</option>
+                                                @endforeach
                                             </select>
                                         </label>
                                     </div>
@@ -184,23 +196,23 @@
                     </span>
                                         </div>
                                     </th>
-                                <th scope="col" class="px-6 py-3 text-start">
+                                <th scope="col" colspan="2" class="px-6 py-3 text-start">
                                     <div class="flex items-center gap-x-2">
-                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">
-                      Connecting Location
-                    </span>
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">Connecting Location & Program</span>
                                     </div>
                                 </th>
-{{--                                    <th scope="col" class="px-1 py-3 text-start">--}}
-{{--                                        <div class="flex items-center">--}}
-{{--                    <span class="text-xs font-semibold uppercase tracking-wide text-gray-800">--}}
-{{--                        Program--}}
-{{--                    </span>--}}
-{{--                                        </div>--}}
-{{--                                    </th>--}}
-                                <th scope="col" class="px-3 py-3 text-end"></th>
+
                             </tr>
                             </thead>
+                            @if($personalDetails->isEmpty())
+                                <tr>
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="pl-3 py-3">
+                                            <span class="text-md-center font-semibold text-gray-600">No details found</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
                                 @foreach($personalDetails as $personalDetail)
                             <tbody class="divide-y divide-gray-200">
                             <tr>
@@ -208,7 +220,7 @@
                                     <div class="ps-6 py-3">
                                         <div class="flex items-center gap-x-3">
                                             <div class="grow">
-                                                <span class="block text-sm font-semibold text-gray-800">{{$personalDetail->Personal_Details->inmate_name}}</span>
+                                                <span class="block text-sm font-semibold text-gray-800">{{Str::limit($personalDetail->Personal_Details->inmate_name, 15, '..')}}</span>
                                                 <span class="block text-sm text-gray-500">{{get_prisons()->where('id', $personalDetail->Personal_Details->prison_id)->first()->name}}</span>
                                             </div>
                                         </div>
@@ -216,7 +228,7 @@
                                 </td>
                                 <td class="h-px w-72 whitespace-nowrap">
                                     <div class="px-6 py-3">
-                                        <span class="block text-sm font-semibold text-gray-800">{{$personalDetail->child_name}}</span>
+                                        <span class="block text-sm font-semibold text-gray-800">{{Str::limit($personalDetail->child_name, 18, '..')}}</span>
                                         <span class="block text-sm text-gray-500">{{$personalDetail->gender}}</span>
                                     </div>
                                 </td>
@@ -240,7 +252,7 @@
                                 </td>
                                 <td class="h-px w-72 whitespace-nowrap">
                                     <div class="px-6 py-3">
-                                        <span class="block text-sm font-semibold text-gray-800">Grade {{$personalDetail->Guardian->guardian_name}}</span>
+                                        <span class="block text-sm font-semibold text-gray-800">{{$personalDetail->Guardian->guardian_name}}</span>
                                         <span class="block text-sm text-gray-500">{{ $personalDetail->Guardian->relationship}}</span>
                                     </div>
                                 </td>
@@ -253,7 +265,7 @@
                                 <td class="h-px w-52 whitespace-nowrap">
                                     <div class="px-6 py-3">
                                         <span class="block text-sm text-gray-800">{{ $personalDetail->Guardian->connecting_location}}</span>
-                                        <span class="block text-sm font-semibold text-gray-500">{{$personalDetail->Guardian->region}}</span>
+                                        <span class="block text-sm font-semibold text-gray-500">{{get_programs()->where('id', $personalDetail->program)->first()->name}}</span>
                                     </div>
                                 </td>
 {{--                                <td class="h-px w-40 whitespace-nowrap">--}}

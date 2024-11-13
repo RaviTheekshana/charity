@@ -8,6 +8,7 @@ use App\Models\Guardian;
 use App\Models\Personal_Details;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use function PHPUnit\Framework\isEmpty;
 
 class PersonalDetailsController extends Controller
 {
@@ -22,6 +23,8 @@ class PersonalDetailsController extends Controller
                 $q->where('child_name', 'LIKE', '%' . $searchQuery . '%')
                     ->orWhereHas('guardian', function ($q) use ($searchQuery) {
                         $q->where('guardian_name', 'LIKE', '%' . $searchQuery . '%');
+                        $q->orWhere('contact_number_1', 'LIKE', '%' . $searchQuery . '%');
+                        $q->orWhere('contact_number_2', 'LIKE', '%' . $searchQuery . '%');
                     })
                     ->orWhereHas('Personal_Details', function ($q) use ($searchQuery) {
                         $q->where('inmate_name', 'LIKE', '%' . $searchQuery . '%');
@@ -29,21 +32,31 @@ class PersonalDetailsController extends Controller
             });
         }
 
-        // Gender Filter
-        if ($request->filled('gender')) {
-            $genders = $request->input('gender');
-            $query->whereHas('Personal_Details', function ($q) use ($genders) {
-                $q->whereIn('gender', $genders);
-            });
-        }
-        // Age Range Filter
-        if ($request->filled('age_range')) {
-            list($minAge, $maxAge) = explode('-', $request->input('age_range'));
-            $query->whereHas('Personal_Details', function ($q) use ($minAge, $maxAge) {
-                $q->whereBetween('age', [(int)$minAge, (int)$maxAge]);
-            });
-        }
+        // Gender Filter with "All" Option Handling
+        if ($request->input('all') !== 'on') {
 
+            // Age Range Filter
+            if ($request->filled('age_range')) {
+                list($minAge, $maxAge) = explode('-', $request->input('age_range'));
+                $query->whereHas('Personal_Details', function ($q) use ($minAge, $maxAge) {
+                    $q->whereBetween('age', [(int)$minAge, (int)$maxAge]);
+                });
+            }
+            //Prison Filter
+            if ($request->filled('prison')) {
+                $prison = $request->input('prison');
+                $query->whereHas('Personal_Details', function ($q) use ($prison) {
+                    $q->where('prison_id', [(int)$prison]);
+                });
+            }
+            // Program Filter
+            if ($request->filled('program')) {
+                $program = $request->input('program');
+                $query->whereHas('program', function ($q) use ($program) {
+                    $q->where('program', [(int)$program]);
+                });
+            }
+        }
         // Pagination and View
         $personalDetails = $query->paginate(8);
         return view('data', compact('personalDetails'));
@@ -143,6 +156,7 @@ class PersonalDetailsController extends Controller
     {
         //Get the child's guardian and personal details
         $personalDetails = Children::with('guardian', 'Personal_Details')->where('id', $id)->first();
+//        dd($personalDetails);
         return view('update', compact('personalDetails'));
     }
 
@@ -170,29 +184,42 @@ class PersonalDetailsController extends Controller
             'region' => 'required|string|max:50',
             'connecting_location' => 'required|string|max:50',
         ]);
-        $child = Children::findOrFail($id);
-        foreach ($request->input('children') as $childs) {
-            $child->update([
-                'child_name' => $childs['child_name'],
-                'age' => $childs['age'],
-                'date_of_birth' => $childs['birthday'],
-                'gender' => $childs['gender'],
-                'address' => $childs['address'],
-                'city' => $childs['city'],
-                'grade' => $childs['grade'],
-                'school' => $childs['school'],
-                'program' => $childs['program_id'],
-            ]);
+        $child = Children::find($id);
+        $personalDetails = Personal_Details::findOrFail($request->input('personal_details_id'));
+        $guardian = Guardian::findOrFail($request->input('guardian_id'));
+
+        if ($child == null) {
+            // Update existing child
+            dd($request->all());
+        } else {
+            // Create new children records if the child is not found
+            foreach ($request->input('children') as $childData) {
+                Children::create([
+                    'child_name' => $childData['child_name'],
+                    'age' => $childData['age'],
+                    'date_of_birth' => $childData['birthday'],
+                    'gender' => $childData['gender'],
+                    'address' => $childData['address'],
+                    'city' => $childData['city'],
+                    'grade' => $childData['grade'],
+                    'school' => $childData['school'],
+                    'program' => $childData['program_id'],
+                    'guardian_id' =>  $guardian->id,
+                    'personal_details_id' => $personalDetails->id,
+                ]);
+            }
         }
-        $personal_details = Personal_Details::findOrFail($child->personal_details_id);
-        $personal_details->update([
+
+        // Update personal details for the child
+        $personalDetails->update([
             'inmate_no' => $request->input('inmate_no'),
             'inmate_name' => $request->input('inmate_name'),
             'prison_id' => $request->input('prison_id'),
             'sentence_no' => $request->input('sentence_no'),
             'end_year_sentence' => $request->input('end_sentence')
         ]);
-        $guardian = Guardian::findOrFail($child->guardian_id);
+
+        // Update guardian details
         $guardian->update([
             'guardian_name' => $request->input('guardian'),
             'contact_number_1' => $request->input('contact_no_one'),
@@ -201,6 +228,7 @@ class PersonalDetailsController extends Controller
             'region' => $request->input('region'),
             'connecting_location' => $request->input('connecting_location'),
         ]);
+
         return back()->with('flash.bannerStyle', 'success')
             ->with('flash.banner', 'Personal details updated successfully!');
     }

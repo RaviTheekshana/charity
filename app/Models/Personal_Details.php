@@ -27,4 +27,8 @@ class Personal_Details extends Model
     {
         return $this->hasMany(Children::class, 'personal_details_id');
     }
+    public function prison()
+    {
+        return $this->hasMany(Prison::class, 'prison_id');
+    }
 }

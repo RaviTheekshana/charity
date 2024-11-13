@@ -55,7 +55,7 @@
 
                     <div class="sm:col-span-9">
                         <div class="sm:flex">
-                            <input id="af-submit-application-full-name" name="inmate_no" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            <input id="af-submit-application-full-name" name="inmate_no" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" required>
                         </div>
                     </div>
                     <!-- End Col -->
@@ -69,7 +69,7 @@
 
                     <div class="sm:col-span-9">
                         <div class="sm:flex">
-                            <input id="af-submit-application-full-name" name="inmate_name" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                            <input id="af-submit-application-full-name" name="inmate_name" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" required>
                         </div>
                     </div>
                     <!-- End Col -->
@@ -80,7 +80,7 @@
                         </label>
                     </div>
                     <div class="sm:col-span-9">
-                        <select id="prison" x-model="prison" name="prison_id" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <select id="prison" x-model="prison" name="prison_id" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" required>
                             <option value="">Select</option>
                             @foreach(get_prisons() as $prison)
                                 <option value="{{ $prison->id }}">{{ ucfirst($prison->name) }}</option>
@@ -95,7 +95,7 @@
                     <!-- End Col -->
 
                     <div class="sm:col-span-9">
-                        <input name="sentence_no" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <input name="sentence_no" type="number" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" required>
                     </div>
                     <!-- End Col -->
 
@@ -119,151 +119,6 @@
                     <!-- End Col -->
                 </div>
                 <!-- End Section -->
-
-{{--                <!-- Section -->--}}
-{{--                <div class="grid sm:grid-cols-12 gap-2 sm:gap-4 py-8 first:pt-0 last:pb-0 border-t first:border-transparent border-gray-200">--}}
-{{--                    <div class="sm:col-span-12">--}}
-{{--                        <h2 class="text-lg font-semibold text-gray-800">--}}
-{{--                            Children Details--}}
-{{--                        </h2>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <div class="inline-block">--}}
-{{--                            <label for="af-submit-application-bio" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                                Child name--}}
-{{--                            </label>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <input id="af-submit-application-child-name" name="child_name" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Age--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <select x-model="age" name="age" class="py-2 px-3 pe-11 block w-50 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                                <option value="">Select</option>--}}
-{{--                                @for ($age = 5; $age <= 19; $age++)--}}
-{{--                                    <option value="{{ $age }}">{{ $age }}</option>--}}
-{{--                                @endfor--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Date Of Birth--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input id="af-submit-application-full-name" name="birthday" type="date" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Gender--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <select id="category" x-model="category" name="gender" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                                <option value="">Select</option>--}}
-{{--                                <option value="male">Male</option>--}}
-{{--                                <option value="female">Female</option>--}}
-{{--                            </select>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Address--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input id="af-submit-application-full-name" name="address" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            City--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input name="city" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-school" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            School--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input id="af-submit-application-school" name="school" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Grade--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <div class="sm:flex">--}}
-{{--                            <input id="af-submit-application-full-name" name="grade" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-b-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-s-lg sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-3">--}}
-{{--                        <label for="af-submit-application-full-name" class="inline-block text-sm font-medium text-gray-500 mt-2.5">--}}
-{{--                            Program--}}
-{{--                        </label>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-
-{{--                    <div class="sm:col-span-9">--}}
-{{--                        <select id="program" x-model="program" name="program_id" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">--}}
-{{--                            <option value="">Select</option>--}}
-{{--                            @foreach(get_programs() as $program)--}}
-{{--                                <option value="{{ $program->id }}">{{ ucfirst($program->name) }}</option>--}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-{{--                    <!-- End Col -->--}}
-{{--                </div>--}}
-{{--                <!-- End Section -->--}}
                 <div x-data="{
     children: [
         {
@@ -311,7 +166,7 @@
                     <template x-for="(child, index) in children" :key="index">
                         <div class="child-details-section grid sm:grid-cols-12 gap-2 sm:gap-4 pt-4 border-t border-gray-200">
                             <div class="sm:col-span-12">
-                                <h3 class="text-md font-semibold text-gray-800">Child #<span x-text="index + 1"></span></h3>
+                                <h3 class="text-md font-semibold text-gray-800">Child <span x-text="index + 1"></span></h3>
                             </div>
 
                             <!-- Child Name -->
@@ -321,7 +176,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <input type="text" x-model="child.child_name" :name="'children[' + index + '][child_name]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <input type="text" x-model="child.child_name" :name="'children[' + index + '][child_name]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <!-- Age -->
@@ -331,7 +186,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <select x-model="child.age" :name="'children[' + index + '][age]'" class="py-2 px-3 pe-11 block w-50 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <select x-model="child.age" :name="'children[' + index + '][age]'" class="py-2 px-3 pe-11 block w-50 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                                     <option value="">Select</option>
                                     @for ($age = 5; $age <= 19; $age++)
                                         <option value="{{ $age }}">{{ $age }}</option>
@@ -346,7 +201,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <input type="date" x-model="child.birthday" :name="'children[' + index + '][birthday]'" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <input type="date" x-model="child.birthday" :name="'children[' + index + '][birthday]'" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <!-- Gender -->
@@ -356,7 +211,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <select x-model="child.gender" :name="'children[' + index + '][gender]'" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <select x-model="child.gender" :name="'children[' + index + '][gender]'" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                                     <option value="">Select</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
@@ -370,7 +225,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <input type="text" x-model="child.address" :name="'children[' + index + '][address]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <input type="text" x-model="child.address" :name="'children[' + index + '][address]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <!-- City -->
@@ -380,7 +235,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <input type="text" x-model="child.city" :name="'children[' + index + '][city]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <input type="text" x-model="child.city" :name="'children[' + index + '][city]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <!-- School -->
@@ -390,7 +245,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <input type="text" x-model="child.school" :name="'children[' + index + '][school]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <input type="text" x-model="child.school" :name="'children[' + index + '][school]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <!-- Grade -->
@@ -400,7 +255,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <input type="number" x-model="child.grade" :name="'children[' + index + '][grade]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <input type="number" x-model="child.grade" :name="'children[' + index + '][grade]'" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                             </div>
 
                             <!-- Program -->
@@ -410,7 +265,7 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <select x-model="child.program_id" :name="'children[' + index + '][program_id]'" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                <select x-model="child.program_id" :name="'children[' + index + '][program_id]'" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" required>
                                     <option value="">Select</option>
                                     @foreach(get_programs() as $program)
                                         <option value="{{ $program->id }}">{{ ucfirst($program->name) }}</option>
