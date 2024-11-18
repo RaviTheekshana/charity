@@ -12,4 +12,9 @@ class Program extends Model
     protected $fillable = [
         'name',
     ];
+    public function children()
+    {
+        return $this->belongsToMany(Children::class, 'child_program', 'program_id', 'child_id');
+    }
 }
+

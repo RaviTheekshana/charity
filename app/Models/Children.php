@@ -39,6 +39,7 @@ class Children extends Model
     }
     public function program()
     {
-        return $this->belongsTo(Program::class, 'program');
+        return $this->belongsToMany(Program::class, 'child_program', 'child_id', 'program_id');
     }
+
 }

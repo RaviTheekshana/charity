@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string('city');
             $table->integer('grade');
             $table->string('school');
-            $table->foreignId('program')->constrained('programs')->onDelete('cascade');
             $table->foreignId('personal_details_id')->constrained('personal__details');
             $table->foreignId('guardian_id')->constrained('guardians');
             $table->timestamps();

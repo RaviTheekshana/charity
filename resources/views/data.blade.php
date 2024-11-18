@@ -265,7 +265,7 @@
                                 <td class="h-px w-52 whitespace-nowrap">
                                     <div class="px-6 py-3">
                                         <span class="block text-sm text-gray-800">{{ $personalDetail->Guardian->connecting_location}}</span>
-                                        <span class="block text-sm font-semibold text-gray-500">{{get_programs()->where('id', $personalDetail->program)->first()->name}}</span>
+{{--                                        <span class="block text-sm font-semibold text-gray-500">{{get_programs()->where('id', $personalDetail->program)->first()->name}}</span>--}}
                                     </div>
                                 </td>
 {{--                                <td class="h-px w-40 whitespace-nowrap">--}}

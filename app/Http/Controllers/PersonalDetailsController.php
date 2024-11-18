@@ -6,6 +6,7 @@ use App\Imports\InmateDataImport;
 use App\Models\Children;
 use App\Models\Guardian;
 use App\Models\Personal_Details;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use function PHPUnit\Framework\isEmpty;
@@ -84,7 +85,8 @@ class PersonalDetailsController extends Controller
             'children.*.city' => 'required|string|max:20',
             'children.*.school' => 'required|string|max:50',
             'children.*.grade' => 'required|integer',
-            'children.*.program_id' => 'required|exists:programs,id',
+            'children.*.program_ids' => 'required|array',
+            'children.*.program_ids.*' => 'exists:programs,id',
             'guardian' => 'required|string|max:255',
             'contact_no_one' => 'required',
             'contact_no_two' => 'required|different:contact_no_one',
@@ -111,7 +113,7 @@ class PersonalDetailsController extends Controller
 
         // Loop through each child in the 'children' array and create a record in the 'Children' table
         foreach ($request->input('children') as $child) {
-            Children::create([
+            $createdChild = Children::create([
                 'child_name' => $child['child_name'],
                 'age' => $child['age'],
                 'date_of_birth' => $child['birthday'],
@@ -120,12 +122,31 @@ class PersonalDetailsController extends Controller
                 'city' => $child['city'],
                 'grade' => $child['grade'],
                 'school' => $child['school'],
-                'program' => $child['program_id'],
                 'guardian_id' => $guardian->id,
                 'personal_details_id' => $personalDetails->id,
             ]);
-        }
+            $createdChildren[] = [
+                'child_instance' => $createdChild,
+                'input_data' => $child,
+            ];
+            foreach ($createdChildren as $childEntry) {
+                $child = $childEntry['child_instance'];
+                $childData = $childEntry['input_data'];
 
+                // Only attach programs if the 'program_ids' field is set
+                if (isset($childData['program_ids'])) {
+                    foreach ($childData['program_ids'] as $programId) {
+                        $program = Program::find($programId);
+                        if ($program) {
+                            // Attach only if not already attached to prevent duplicates
+                            if (!$program->children()->where('child_id', $child->id)->exists()) {
+                                $program->children()->attach($child->id);
+                            }
+                        }
+                    }
+                }
+            }
+            }
         return back()->with('flash.bannerStyle', 'success')
             ->with('flash.banner', 'Personal details created successfully!');
     }
@@ -162,6 +183,7 @@ class PersonalDetailsController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Validation
         $request->validate([
             'inmate_no' => 'required|string|max:25',
             'inmate_name' => 'required|string|max:255',
@@ -184,29 +206,28 @@ class PersonalDetailsController extends Controller
             'region' => 'required|string|max:50',
             'connecting_location' => 'required|string|max:50',
         ]);
-        $child = Children::find($id);
-        $personalDetails = Personal_Details::findOrFail($request->input('personal_details_id'));
-        $guardian = Guardian::findOrFail($request->input('guardian_id'));
 
-        if ($child == null) {
-            // Update existing child
-            dd($request->all());
-        } else {
-            // Create new children records if the child is not found
+        // Find the specific child and related details
+        $child = Children::find($id);
+        $personalDetails = Personal_Details::findOrFail($child->personal_details_id);
+        $guardian = Guardian::findOrFail($child->guardian_id);
+
+        // Update children details
+        if ($request->filled('children')) {
             foreach ($request->input('children') as $childData) {
-                Children::create([
-                    'child_name' => $childData['child_name'],
-                    'age' => $childData['age'],
-                    'date_of_birth' => $childData['birthday'],
-                    'gender' => $childData['gender'],
-                    'address' => $childData['address'],
-                    'city' => $childData['city'],
-                    'grade' => $childData['grade'],
-                    'school' => $childData['school'],
-                    'program' => $childData['program_id'],
-                    'guardian_id' =>  $guardian->id,
-                    'personal_details_id' => $personalDetails->id,
-                ]);
+                    if ($child) {
+                        $child->update([
+                            'child_name' => $childData['child_name'],
+                            'age' => $childData['age'],
+                            'date_of_birth' => $childData['birthday'],
+                            'gender' => $childData['gender'],
+                            'address' => $childData['address'],
+                            'city' => $childData['city'],
+                            'grade' => $childData['grade'],
+                            'school' => $childData['school'],
+                            'program' => $childData['program_id'],
+                        ]);
+                    }
             }
         }
 
@@ -232,6 +253,9 @@ class PersonalDetailsController extends Controller
         return back()->with('flash.bannerStyle', 'success')
             ->with('flash.banner', 'Personal details updated successfully!');
     }
+
+
+
 
     public function destroy($id)
     {

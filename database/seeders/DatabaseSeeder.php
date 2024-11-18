@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
         $programs = [
-            'Angel Tree','Kids Clubs','Promis Path','Scholarship Program','Poorna Jeevana'
+            'angel_tree', 'kids_clubs', 'promis_path', 'scholarship_program', 'poorna_jeevana'
         ];
         foreach ($programs as $program) {
             \App\Models\Program::create([
