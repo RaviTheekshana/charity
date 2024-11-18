@@ -54,7 +54,7 @@ class PersonalDetailsController extends Controller
             if ($request->filled('program')) {
                 $program = $request->input('program');
                 $query->whereHas('program', function ($q) use ($program) {
-                    $q->where('program', [(int)$program]);
+                    $q->where('program_id', [(int)$program]);
                 });
             }
         }
