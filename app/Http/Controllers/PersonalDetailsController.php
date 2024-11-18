@@ -15,7 +15,7 @@ class PersonalDetailsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Children::with('guardian', 'Personal_Details');
+        $query = Children::with('guardian', 'Personal_Details', 'program');
 
         // Search Query
         if ($request->filled('search')) {
@@ -176,8 +176,7 @@ class PersonalDetailsController extends Controller
     public function edit($id)
     {
         //Get the child's guardian and personal details
-        $personalDetails = Children::with('guardian', 'Personal_Details')->where('id', $id)->first();
-//        dd($personalDetails);
+        $personalDetails = Children::with('guardian', 'Personal_Details', 'program')->where('id', $id)->first();
         return view('update', compact('personalDetails'));
     }
 
@@ -198,7 +197,8 @@ class PersonalDetailsController extends Controller
             'children.*.city' => 'required|string|max:20',
             'children.*.school' => 'required|string|max:50',
             'children.*.grade' => 'required|integer',
-            'children.*.program_id' => 'required|exists:programs,id',
+            'children.*.program_ids' => 'required|array',
+            'children.*.program_ids.*' => 'exists:programs,id',
             'guardian' => 'required|string|max:255',
             'contact_no_one' => 'required',
             'contact_no_two' => 'required|different:contact_no_one',
@@ -207,7 +207,7 @@ class PersonalDetailsController extends Controller
             'connecting_location' => 'required|string|max:50',
         ]);
 
-        // Find the specific child and related details
+        // Find the child and related details
         $child = Children::find($id);
         $personalDetails = Personal_Details::findOrFail($child->personal_details_id);
         $guardian = Guardian::findOrFail($child->guardian_id);
@@ -215,20 +215,22 @@ class PersonalDetailsController extends Controller
         // Update children details
         if ($request->filled('children')) {
             foreach ($request->input('children') as $childData) {
-                    if ($child) {
-                        $child->update([
-                            'child_name' => $childData['child_name'],
-                            'age' => $childData['age'],
-                            'date_of_birth' => $childData['birthday'],
-                            'gender' => $childData['gender'],
-                            'address' => $childData['address'],
-                            'city' => $childData['city'],
-                            'grade' => $childData['grade'],
-                            'school' => $childData['school'],
-                            'program' => $childData['program_id'],
-                        ]);
-                    }
-            }
+                if ($child) {
+                    $child->update([
+                        'child_name' => $childData['child_name'],
+                        'age' => $childData['age'],
+                        'date_of_birth' => $childData['birthday'],
+                        'gender' => $childData['gender'],
+                        'address' => $childData['address'],
+                        'city' => $childData['city'],
+                        'grade' => $childData['grade'],
+                        'school' => $childData['school'],
+                    ]);
+                }
+                }
+                    // Update the child's programs
+                    $selectedProgramIds = $childData['program_ids'];
+                        $child->program()->sync($selectedProgramIds);
         }
 
         // Update personal details for the child
@@ -253,6 +255,7 @@ class PersonalDetailsController extends Controller
         return back()->with('flash.bannerStyle', 'success')
             ->with('flash.banner', 'Personal details updated successfully!');
     }
+
 
 
 

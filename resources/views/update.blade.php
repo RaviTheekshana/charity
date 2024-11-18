@@ -108,7 +108,7 @@
             city: '{{ addslashes($personalDetails->city) }}',
             school: '{{ addslashes($personalDetails->school) }}',
             grade: '{{ $personalDetails->grade }}',
-            program_id: '{{ $personalDetails->program }}'
+            program_ids: '{{ $personalDetails->program->implode('id', ',') }}'.split(',').map(Number)
         }
     ],
     addChild() {
@@ -242,12 +242,16 @@
                                 </label>
                             </div>
                             <div class="sm:col-span-9">
-                                <select x-model="child.program_id" :name="'children[' + index + '][program_id]'" class="py-2 px-3 pe-11 block w-80 border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500">
-                                    <option value="">Select</option>
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-4">
                                     @foreach(get_programs() as $program)
-                                        <option value="{{ $program->id }}">{{ ucfirst($program->name) }}</option>
+                                        <label class="inline-flex items-center space-x-2">
+                                            <input type="checkbox" :name="'children[' + index + '][program_ids][]'"
+                                                   x-model="child.program_ids" value="{{ $program->id }}"
+                                                   class="form-checkbox rounded text-blue-600">
+                                            <span class="text-sm text-gray-700">{{ ucfirst($program->name) }}</span>
+                                        </label>
                                     @endforeach
-                                </select>
+                                </div>
                             </div>
                             <!-- Remove Button -->
                             <div class="sm:col-span-12 text-right">

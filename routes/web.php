@@ -21,7 +21,7 @@ Route::post('personal_information', [PersonalDetailsController::class, 'store'])
 
 Route::post('/import', [PersonalDetailsController::class, 'import'])->name('import');
 
-Route::get('data', [PersonalDetailsController::class, 'index'])->name('data.index');
+Route::get('data', [PersonalDetailsController::class, 'index'])->name('data.index')->middleware('auth');
 
-Route::get('/data/{id}', [PersonalDetailsController::class, 'edit'])->name('data.edit');
-Route::put('/data/{id}', [PersonalDetailsController::class, 'update'])->name('personal_information.update');
+Route::get('/data/{id}', [PersonalDetailsController::class, 'edit'])->name('data.edit')->middleware('auth');
+Route::put('/data/{id}', [PersonalDetailsController::class, 'update'])->name('personal_information.update')->middleware('auth');

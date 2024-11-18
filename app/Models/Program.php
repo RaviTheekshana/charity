@@ -16,5 +16,6 @@ class Program extends Model
     {
         return $this->belongsToMany(Children::class, 'child_program', 'program_id', 'child_id');
     }
+
 }
 
