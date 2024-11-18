@@ -84,7 +84,7 @@ class PersonalDetailsController extends Controller
             'children.*.address' => 'required|string|max:255',
             'children.*.city' => 'required|string|max:20',
             'children.*.school' => 'required|string|max:50',
-            'children.*.grade' => 'required|integer',
+            'children.*.grade' => 'required|int',
             'children.*.program_ids' => 'required|array',
             'children.*.program_ids.*' => 'exists:programs,id',
             'guardian' => 'required|string|max:255',

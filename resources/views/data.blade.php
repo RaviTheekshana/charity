@@ -270,12 +270,6 @@
                                         @endforeach
                                     </div>
                                 </td>
-{{--                                <td class="h-px w-40 whitespace-nowrap">--}}
-{{--                                    <div class="px-1 py-3">--}}
-{{--                                        <span class="block text-sm text-gray-800">{{ $personalDetail->program}}</span>--}}
-{{--                                        <span class="block text-sm font-semibold text-gray-500"></span>--}}
-{{--                                    </div>--}}
-{{--                                </td>--}}
                                 <td class="size-px whitespace-nowrap">
                                     <div class="px-3 py-1.5">
                                         <a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium" href="{{ route('data.edit', ['id' => $personalDetail->id])}}">

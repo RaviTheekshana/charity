@@ -279,12 +279,6 @@
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
                                 </td>
-
-
-
-
-
-
                                 <td class="size-px whitespace-nowrap">
                                     <div class="px-3 py-1.5">
                                         <a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium" href="<?php echo e(route('data.edit', ['id' => $personalDetail->id])); ?>">
